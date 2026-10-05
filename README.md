@@ -29,6 +29,7 @@
 ### YouTube
 - Remove ads
 - SponsorBlock
+- Return YouTube Dislike
 - Remove background playback restrictions
 - Remove share links tracking query parameter
 - Hide and change navigation buttons

@@ -12,25 +12,36 @@ val textComponentPatch = patch(
     SpannableStringBuilderFingerprint.hookMethod {
         val getSpannedMethod = ::spannableStringBuilderGetSpannedMethod.method
         after {
-            if (it.result == "")
+            val result = it.result as? CharSequence ?: return@after
+            if (result.isEmpty())
                 return@after
 
             val spannedContext = it.args[0]
+            val conversionContext = ConversionContext(spannedContext)
             val spanned = getSpannedMethod(it.args[2]) as String
             // TODO EmojiCompat.process(spanned)
-            hooks.forEach { it(ConversionContext(spannedContext), spanned) }
+            hooks.forEach { hook -> hook(conversionContext, spanned) }
+
+            var currentResult = result
+            overrides.forEach { override ->
+                currentResult = override(conversionContext, currentResult)
+            }
+            it.result = currentResult
         }
     }
 }
 
 private val hooks = mutableListOf<(ContextInterface, CharSequence) -> Unit>()
-private val overrides = mutableListOf<(ContextInterface, CharSequence) -> String>()
+private val overrides = mutableListOf<(ContextInterface, CharSequence) -> CharSequence>()
 
 internal fun hookSpannableString(
     hook: (ContextInterface, CharSequence) -> Unit,
-//    overrideSpan: Boolean = false
 ) {
     hooks.add { a, b -> hook(a, b) }
 }
 
-// TODO lithoSpannableStringPatch hookLithoSpannableString
+fun hookLithoSpannableString(
+    hook: (ContextInterface, CharSequence) -> CharSequence,
+) {
+    overrides.add(hook)
+}
