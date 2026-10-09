@@ -27,13 +27,21 @@ jobs:
       run: chmod +x gradlew
 
     - name: Write key
-      if: ${{ secrets.KEYSTORE != '' }}
+      env:
+        KEYSTORE_DATA: ${{ secrets.KEYSTORE }}
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+        KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
       run: |
-        echo KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }} > signing.properties
-        echo KEYSTORE_ALIAS=${{ secrets.KEYSTORE_ALIAS }} >> signing.properties
-        echo KEYSTORE_ALIAS_PASSWORD='${{ secrets.KEYSTORE_ALIAS_PASSWORD }}' >> signing.properties
-        echo KEYSTORE_FILE=../key.jks >> signing.properties
-        echo ${{ secrets.KEYSTORE }} | base64 --decode > key.jks
+        if [ -n "$KEYSTORE_DATA" ]; then
+          echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" > signing.properties
+          echo "KEYSTORE_ALIAS=$KEYSTORE_ALIAS" >> signing.properties
+          echo "KEYSTORE_ALIAS_PASSWORD=$KEYSTORE_ALIAS_PASSWORD" >> signing.properties
+          echo "KEYSTORE_FILE=../key.jks" >> signing.properties
+          echo "$KEYSTORE_DATA" | base64 --decode > key.jks
+        else
+          echo "No KEYSTORE secret found. Skipping keystore configuration."
+        fi
 
     - name: Build Debug
       run: ./gradlew assembleDebug
