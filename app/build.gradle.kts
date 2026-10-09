@@ -293,6 +293,12 @@ abstract class CopyResourcesTask @Inject constructor() : DefaultTask() {
             "speedbutton/drawable" to null,
             "navigationbuttons/drawable" to null,
             "speed/drawable" to null,
+            "loopvideobutton/drawable" to null,
+            "mutevideobutton/drawable" to null,
+            "pipbutton/drawable" to null,
+            "reloadbutton/drawable" to null,
+            "savetowatchlaterbutton/drawable" to null,
+            "playallbutton/drawable" to null,
         )
 
         for ((resourcePath, excludes) in resourcePaths) {

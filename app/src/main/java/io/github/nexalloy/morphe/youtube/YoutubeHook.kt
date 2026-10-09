@@ -30,6 +30,20 @@ import io.github.nexalloy.morphe.youtube.misc.debugging.EnableDebugging
 import io.github.nexalloy.morphe.youtube.misc.privacy.SanitizeSharingLinks
 import io.github.nexalloy.morphe.youtube.misc.settings.SettingsHook
 import io.github.nexalloy.morphe.youtube.shared.YOUTUBE_MAIN_ACTIVITY_CLASS_TYPE
+import io.github.nexalloy.morphe.youtube.interaction.dialog.RemoveViewerDiscretionDialogPatch
+import io.github.nexalloy.morphe.youtube.interaction.loop.LoopVideoPatch
+import io.github.nexalloy.morphe.youtube.interaction.mute.MuteVideoButtonPatch
+import io.github.nexalloy.morphe.youtube.interaction.pip.PipButtonPatch
+import io.github.nexalloy.morphe.youtube.interaction.playall.PlayAllButtonPatch
+import io.github.nexalloy.morphe.youtube.interaction.reload.ReloadVideoButtonPatch
+import io.github.nexalloy.morphe.youtube.interaction.savetowatchlater.SaveToWatchLaterButtonPatch
+import io.github.nexalloy.morphe.youtube.layout.originaltitles.RestoreOriginalTitlesPatch
+import io.github.nexalloy.morphe.youtube.layout.player.fullscreen.ForceFullscreenLandscapePatch
+import io.github.nexalloy.morphe.youtube.layout.scrolling.DisableScrollSpeedLimitPatch
+import io.github.nexalloy.morphe.youtube.misc.dns.CheckWatchHistoryDomainNameResolutionPatch
+import io.github.nexalloy.morphe.youtube.misc.links.BypassLinkRedirectsPatch
+import io.github.nexalloy.morphe.youtube.misc.links.OpenLinksExternallyPatch
+import io.github.nexalloy.morphe.youtube.misc.quic.DisableQUICProtocolPatch
 import io.github.nexalloy.morphe.youtube.video.audio.ForceOriginalAudio
 import io.github.nexalloy.morphe.youtube.video.codecs.DisableVideoCodecs
 import io.github.nexalloy.morphe.youtube.video.quality.VideoQuality
@@ -98,6 +112,20 @@ val YouTubePatches = arrayOf(
     CheckRecycleBitmapMediaSession,
     changeStartPagePatch,
     ReturnYouTubeDislike,
+    RestoreOriginalTitlesPatch,
+    LoopVideoPatch,
+    MuteVideoButtonPatch,
+    PipButtonPatch,
+    PlayAllButtonPatch,
+    ReloadVideoButtonPatch,
+    SaveToWatchLaterButtonPatch,
+    ForceFullscreenLandscapePatch,
+    DisableScrollSpeedLimitPatch,
+    CheckWatchHistoryDomainNameResolutionPatch,
+    DisableQUICProtocolPatch,
+    OpenLinksExternallyPatch,
+    BypassLinkRedirectsPatch,
+    RemoveViewerDiscretionDialogPatch,
     // make sure settingsHook at end to build preferences
     SettingsHook,
     FeatureOverride
