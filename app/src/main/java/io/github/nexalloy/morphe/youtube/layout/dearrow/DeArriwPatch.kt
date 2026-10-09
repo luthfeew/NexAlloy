@@ -6,6 +6,7 @@ import io.github.nexalloy.morphe.shared.misc.settings.preference.ListPreference
 import io.github.nexalloy.morphe.shared.misc.settings.preference.NonInteractivePreference
 import io.github.nexalloy.morphe.shared.misc.settings.preference.SwitchPreference
 import io.github.nexalloy.morphe.shared.misc.settings.preference.TextPreference
+import io.github.nexalloy.morphe.youtube.layout.originaltitles.RestoreOriginalTitlesPatch
 import io.github.nexalloy.morphe.youtube.misc.imageurlhook.addImageUrlErrorCallbackHook
 import io.github.nexalloy.morphe.youtube.misc.imageurlhook.addImageUrlHook
 import io.github.nexalloy.morphe.youtube.misc.imageurlhook.addImageUrlSuccessCallbackHook
@@ -20,16 +21,13 @@ val deArrowPatch = patch(
 ) {
     dependsOn(
         cronetImageUrlHookPatch,
-        // Thumbnails that fail to load are loaded again by mounting the Litho views again.
-//        lithoRelayoutPatch,
-        // Titles are replaced by the same hooks that restore the original titles.
-//        restoreOriginalTitlesPatch,
+        RestoreOriginalTitlesPatch,
     )
     val entries = "morphe_dearrow_thumbnail_options_entries"
     val values = "morphe_dearrow_thumbnail_options_entry_values"
     PreferenceScreen.DEARROW.addPreferences(
-//        SwitchPreference("morphe_dearrow_titles", summary = true),
-//        SwitchPreference("morphe_dearrow_titles_icon", summary = true),
+        SwitchPreference("morphe_dearrow_titles", summary = true),
+        SwitchPreference("morphe_dearrow_titles_icon", summary = true),
         ListPreference(
             key = "morphe_dearrow_thumbnail_home",
             entriesKey = entries,
