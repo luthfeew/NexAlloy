@@ -48,15 +48,22 @@ android {
     val ksFile = rootProject.file("signing.properties")
     signingConfigs {
         if (ksFile.exists()) {
-            create("release") {
-                val properties = Properties().apply {
-                    ksFile.inputStream().use { load(it) }
-                }
+            val properties = Properties().apply {
+                ksFile.inputStream().use { load(it) }
+            }
+            val ksPath = properties["KEYSTORE_FILE"] as? String
+            val ksStoreFile = if (!ksPath.isNullOrEmpty()) file(ksPath) else null
+            val password = properties["KEYSTORE_PASSWORD"] as? String
+            val alias = properties["KEYSTORE_ALIAS"] as? String
+            val aliasPassword = properties["KEYSTORE_ALIAS_PASSWORD"] as? String
 
-                storePassword = properties["KEYSTORE_PASSWORD"] as String
-                keyAlias = properties["KEYSTORE_ALIAS"] as String
-                keyPassword = properties["KEYSTORE_ALIAS_PASSWORD"] as String
-                storeFile = file(properties["KEYSTORE_FILE"] as String)
+            if (ksStoreFile != null && ksStoreFile.exists() && ksStoreFile.length() > 0L && !password.isNullOrEmpty() && !alias.isNullOrEmpty()) {
+                create("release") {
+                    storePassword = password
+                    keyAlias = alias
+                    keyPassword = if (!aliasPassword.isNullOrEmpty()) aliasPassword else password
+                    storeFile = ksStoreFile
+                }
             }
         }
     }
@@ -68,8 +75,8 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
-            if (ksFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
+            signingConfigs.findByName("release")?.let {
+                signingConfig = it
             }
         }
     }

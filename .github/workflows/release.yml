@@ -28,6 +28,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Write key
+      if: ${{ secrets.KEYSTORE != '' }}
       run: |
         echo KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }} > signing.properties
         echo KEYSTORE_ALIAS=${{ secrets.KEYSTORE_ALIAS }} >> signing.properties
@@ -40,7 +41,11 @@ jobs:
 
     - run: |
         cd app/build/outputs/apk/release/
-        mv app-release.apk NexAlloy-${{ github.ref_name }}.apk
+        if [ -f app-release.apk ]; then
+          mv app-release.apk NexAlloy-${{ github.ref_name }}.apk
+        elif [ -f app-release-unsigned.apk ]; then
+          mv app-release-unsigned.apk NexAlloy-${{ github.ref_name }}.apk
+        fi
         gh release create --prerelease ${{ github.ref_name }} NexAlloy-${{ github.ref_name }}.apk
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
